@@ -56,7 +56,7 @@ public class Matrix {
         double[][] yColumnRows = y.getColumnRows();
         double[][] resultColumnRows = new double[x.getNumRows()][x.getNumColumns()];
 
-        if(size(x)!= size(y))
+        if(size(x)[0] != size(y)[0] || size(x)[1] != size(y)[1])
         {
             //throws an Exception because of unequal sizes of the matrices
             throw new IllegalArgumentException("The Matrices are not the same size");
@@ -183,5 +183,20 @@ public class Matrix {
 
     public void setColumnRows(double[][] columnRows) {
         this.columnRows = columnRows;
+    }
+
+    @Override
+    public String toString() {
+        String arrayNums = "";
+        for(int i = 0; i < numRows; i++)
+        {
+            arrayNums += Arrays.toString(columnRows[i]) + ", ";
+        }
+
+        return "Matrix{" +
+                "numRows=" + numRows +
+                ", numColumns=" + numColumns +
+                ", columnRows=" + arrayNums +
+                '}';
     }
 }
