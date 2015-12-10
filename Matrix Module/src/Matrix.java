@@ -1,5 +1,3 @@
-import com.sun.xml.internal.bind.v2.TODO;
-
 import java.util.Arrays;
 
 /**
@@ -8,6 +6,7 @@ import java.util.Arrays;
  *
  *   This Class can be used to create Matrices and perform matrix operations such as:
  *      addition, multiplication, scaling, Row Reductions, etc.[WIP]
+ *   This will be bundled as a jar library
  */
 public class Matrix {
 
