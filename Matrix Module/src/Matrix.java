@@ -155,6 +155,151 @@ public class Matrix {
         return result;
     }
 
+    /* augment(x,y) -- This method is used to add more columns to a matrix
+     * @params x -- this is the matrix that you want to augment
+     * @params y -- this is the matrix you want to augment matrix x with
+     */
+    public static Matrix augment(Matrix x, Matrix y)
+    {
+        Matrix result;
+        double[][] resultColumnRows = new double[x.numRows][x.numColumns + y.numColumns];
+        double[][] xColumnRows = x.getColumnRows();
+        double[][] yColumnRows = y.getColumnRows();
+        if(x.numRows != y.numRows)
+        {
+            throw new IllegalArgumentException("The matrices must have the same number of rows if you want to augment them");
+        }
+        else
+        {
+            for(int i = 0; i < resultColumnRows.length; i++)
+            {
+                for(int j = 0; j < resultColumnRows[0].length; j++)
+                {
+                    if(j < x.numColumns )
+                    {
+                        resultColumnRows[i][j] = xColumnRows[i][j];
+                    }
+                    else
+                    {
+                        resultColumnRows[i][j] = yColumnRows[i][j-x.numColumns];
+                    }
+                }
+            }
+        }
+
+        result = new Matrix(resultColumnRows);
+        return result;
+    }
+
+    /* rowMultiplication(x,y) -- this method is a util for reduceToEchelon and reduceToReducedEchelon
+     * @params x -- this is the row that is passed in
+     * @params y -- this is the multiple that is passed in
+     */
+    private static double[] rowMultiplication(double[] x, double y)
+    {
+        double[] result = new double[x.length];
+        for(int i = 0; i < x.length; i++)
+        {
+            result[i] = x[i] * y;
+        }
+
+        return result;
+    }
+
+    /* rowSubtraction(x,y) -- this method is a util method for reduceToEchelon and reduceToReducedEchelon
+     * @params x -- this is the row being subtracted from
+     * @params y -- this is the row doing the subtracting
+     */
+    private static double[] rowSubtraction(double[] x, double[] y)
+    {
+        double[] result = new double[x.length];
+        for(int i = 0; i < x.length; i++)
+        {
+            result[i] = x[i] - y[i];
+        }
+
+        return result;
+    }
+
+    /* reduceToEchelon(x) -- this method is used to reduce a matrix to echelon form
+     * ***NOTE*** echelon form is different than reduced echelon form make sure you use the right one
+     * @params x -- this is the matrix that you want to reduce to echelon form
+     */
+    public static Matrix reduceToEchelon(Matrix x)
+    {
+        double[][] xColumnRows = x.getColumnRows();
+        double[] rowA = new double[x.numColumns];
+        double[] rowB = new double[x.numColumns];
+
+        for(int i = 0; i < x.numRows; i++)
+        {
+            if(xColumnRows[i][i] == 0)
+            {
+                rowA = xColumnRows[i];
+                for(int k = i+1; k<x.numRows; k++)
+                {
+                    if(xColumnRows[k][i] != 0)
+                    {
+                        rowB = xColumnRows[k];
+                        xColumnRows[k] = rowA;
+                        xColumnRows[i] = rowB;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                for(int k = i+1; k<x.numRows; k++ )
+                {
+                    rowA = Matrix.rowMultiplication(xColumnRows[i],xColumnRows[k][i]/xColumnRows[i][i]);
+                    xColumnRows[k] = Matrix.rowSubtraction(xColumnRows[k],rowA);
+                }
+            }
+        }
+
+        Matrix result = new Matrix(xColumnRows);
+        return result;
+    }
+
+
+    /* reduceToReducedEchelonForm(x) -- this method is used to reduce a matrix to reduced echelon form
+     * ***NOTE*** echelon form is different than reduced echelon form make sure you are using the right one
+     * @params x -- this is the matrix that you want reduced
+     */
+    public static Matrix reduceToReducedEchelonForm(Matrix x)
+    {
+        Matrix result;
+        Matrix temp = Matrix.reduceToEchelon(x);
+        double[][] tempColumnRows = temp.getColumnRows();
+        int rowNumA = temp.numRows;
+        double[] rowA = new double[temp.numColumns];
+        for(int i = 0; i <temp.numRows; i++)
+        {
+            if(tempColumnRows[i][i] != 0){
+                rowA = Matrix.rowMultiplication(tempColumnRows[i],1.0/tempColumnRows[i][i]);
+                tempColumnRows[i] = rowA;
+            }
+        }
+
+
+        for(int i = rowNumA - 1; i >= 0; i--) {
+            for (int j = 0; j < temp.numColumns; j++) {
+                if (tempColumnRows[i][j] != 0) {
+                    for (int k = i - 1; k >= 0; k--) {
+                        if (tempColumnRows[k][j] != 0) {
+                            rowA = Matrix.rowMultiplication(tempColumnRows[i], tempColumnRows[k][j] / tempColumnRows[i][j]);
+                            tempColumnRows[k] = Matrix.rowSubtraction(tempColumnRows[k], rowA);
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+        result = new Matrix(tempColumnRows);
+        return result;
+    }
+
 
 
 
