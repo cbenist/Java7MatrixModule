@@ -15,7 +15,7 @@ public class Matrix {
     private int numColumns;
     private double[][] columnRows;
 
-    /* constructor for matrix dimensions
+    /* constructor for matrix dimensions -- mostly for in class operations
      * @param x -- is the number of rows
      * @param y -- is the number of columns
      */
