@@ -1,6 +1,6 @@
 # Java7MatrixModule
 ## Colin Benist
-This is a Matrix module for Java 7. I recently finished  a Linear Algebra course that worked a lot with matrices. These are some things that I found would have been useful to have. My Software Development 2 Course: ggc-itec.github.io
+This is a Matrix module for Java 7. I recently finished  a Linear Algebra course that worked a lot with matrices. These are some things that I found would have been useful to have. My Software Development 2 Course: <a href=ggc-itec.github.io>ggc-itec.github.io</a>
 
 
 ###The methods that are currently Available:
