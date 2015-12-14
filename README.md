@@ -9,9 +9,10 @@ This is a Work in Progress Matrix module for Java 7. I recently finished  a Line
   * Matrix Reduce to Echelon Form
   * Matrix Reduce to Reduced Echelon Form
   * Matrix Augmentation 
+  * Inverting Matrices
+  * Transposing Matrices
+  * Finding the Determinant of Matrices
 
 ###Methods I plan on implementing in the future:
-  * Inverting matrix
-  * Transposing matrix
   * Suggestions?
 
