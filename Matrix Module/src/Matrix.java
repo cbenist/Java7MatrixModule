@@ -115,6 +115,7 @@ public class Matrix {
 
         return result;
     }
+
     /* matrixMultiply() -- this method is used to multiply 2 matrices together
      * @params x -- The Left Matrix to multiply
      * @params y -- the Right Matrix to multiply
@@ -296,6 +297,114 @@ public class Matrix {
         }
 
         result = new Matrix(tempColumnRows);
+        return result;
+    }
+
+    /* transpose(x) -- this method is used to transpose a matrix.
+     * @params x -- This is the matrix you want transposed
+     */
+    public static Matrix transpose(Matrix x){
+        Matrix result;
+        double[][] xColumnRows = x.getColumnRows();
+        double[][] resultColumnRows = new double[x.numColumns][x.numRows];
+
+        for(int i = 0; i < x.numColumns; i++){
+
+            for(int j = 0; j<x.numRows; j++){
+                resultColumnRows[i][j] = xColumnRows[j][i];
+            }
+
+        }
+
+            result = new Matrix(resultColumnRows);
+        return result;
+    }
+
+    /* determinant(x) -- this method is used to find the determinant of a matrix (matrix must be square)
+     * @params x -- this is the matrix of the determinant you want to find.
+     */
+    public static double determinant(Matrix x){
+        double determinant = 0.0;
+        if(x.numRows != x.numColumns){
+            throw new IllegalArgumentException("the Matrix must be square");
+        }
+
+        double[][] xColumnRows = x.getColumnRows();
+        double[][] tempColumnRows = new double[x.numRows - 1][x.numRows - 1];
+
+
+        if(x.numRows == 2)
+        {
+            determinant = xColumnRows[0][0] * xColumnRows[1][1] - xColumnRows[0][1] * xColumnRows[1][0];
+        }
+        else{
+            for(int i = x.numRows - 1; i >= 0; i--){
+                for(int j = 0; j < x.numRows - 1; j++)
+                {
+                    int l = 0;
+                        for(int k = 0; k < x.numRows; k++){
+                         if(k != i){
+                             tempColumnRows[j][l] = xColumnRows[j][k];
+                             l++;
+                         }
+                        }
+                }
+                if((x.numRows + i + 1)%2 == 0){
+                    determinant += xColumnRows[x.numRows-1][i] * determinant(new Matrix(tempColumnRows));
+                }
+                else{
+                    determinant -= xColumnRows[x.numRows-1][i] * determinant(new Matrix(tempColumnRows));
+                }
+            }
+        }
+
+
+
+        return determinant;
+    }
+
+    /* inverse(x) -- this method is used to find the inverse of a matrix
+     * @params x --this is the matrix you want inverted ***THE MATRIX MUST BE SQUARE AND THE DETERMINANT CANNOT BE ZERO***
+     */
+    public static Matrix inverse(Matrix x){
+        if(x.numRows != x.numColumns){
+            throw new IllegalArgumentException("The Matrix must be square");
+        }
+        if(Matrix.determinant(x) == 0){
+            throw new IllegalArgumentException("The matrix's determinant is zero, not invertible.");
+        }
+        Matrix result;
+        double[][] resultColumnRows = new double[x.numRows][x.numRows];
+        double[][] idColumnRows = new double[x.numRows][x.numRows];
+
+        for(int i = 0; i<x.numRows; i++)
+        {
+            for(int j = 0; j<x.numRows; j++){
+                if(i == j){
+                    idColumnRows[i][j] = 1.0;
+                }
+                else
+                {
+                    idColumnRows[i][j] = 0.0;
+                }
+            }
+        }
+        Matrix idMatrix = new Matrix(idColumnRows);
+        Matrix invertableMatrix = Matrix.augment(x,idMatrix);
+        Matrix invertedMatrix = Matrix.reduceToReducedEchelonForm(invertableMatrix);
+        double[][] invertedColumnRows = invertedMatrix.getColumnRows();
+
+
+        for(int i = 0; i < invertedMatrix.numRows; i++){
+            int k = 0;
+            for(int j = x.numColumns; j < invertedMatrix.numColumns; j++){
+                resultColumnRows[i][k] = invertedColumnRows[i][j];
+                k++;
+            }
+        }
+
+
+        result = new Matrix(resultColumnRows);
         return result;
     }
 

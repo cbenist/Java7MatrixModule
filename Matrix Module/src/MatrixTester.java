@@ -55,7 +55,30 @@ public class MatrixTester {
 
         System.out.println("Matrix J: " + matrixJ);
 
+        Matrix matrixK = Matrix.transpose(matrixH);
+
+        System.out.println("Matrix K: " + matrixK);
+
+        double det0 = Matrix.determinant(matrixH);
+
+        System.out.println("det H: " + det0);
+
+        double det1 = Matrix.determinant(matrixA);
+
+        System.out.println("det A: " + det1);
+
+        Matrix matrixL = new Matrix(new double[][]{{1.0,0.0,0.0},{0.0,1.0,0.0},{0.0,0.0,3.0}});
+
+        double det2 = Matrix.determinant(matrixL);
+
+        System.out.println("Matrix L: " + matrixL);
+
+        System.out.println("det L: " + det2);
+
+        Matrix matrixM = Matrix.inverse(matrixL);
+
+        System.out.println("Matrix M: " + matrixM);
+
 
     }
-}
-*/
+}*/
