@@ -38,8 +38,7 @@ public class Matrix {
     /* Matrix.size(x) method that returns the size of the matrix in a 2 integer long array
      * @params x -- this is the matrix that you are checking the size of
      */
-    public static int[] size(Matrix x)
-    {
+    public static int[] size(Matrix x) {
         int[] size = {x.getNumRows(), x.getNumColumns()};
         return size;
     }
@@ -84,8 +83,7 @@ public class Matrix {
      * @params x -- this is the matrix that you want to scale
      * @params y -- this is the double that you want to scale the matrix by
      */
-    public static Matrix scale(Matrix x, double y)
-    {
+    public static Matrix scale(Matrix x, double y){
         Matrix result;
         double[][] xColumnRows = x.getColumnRows();
         double[][] resultColumnRows = new double[x.getNumRows()][x.getNumColumns()];
@@ -105,10 +103,9 @@ public class Matrix {
      * @params x -- this is the matrix that you want the row from
      * @params y -- this is the number of the row that you want returned
      */
-    //TODO
-    public static double[] splitCurrentRow(Matrix x, int y)
-    {
-        double[] result = new double[x.getNumColumns()];
+
+    public static double[] splitCurrentRow(Matrix x, int y){
+        double[] result;
         double[][] xColumnRows = x.getColumnRows();
 
         result = xColumnRows[y];
@@ -120,8 +117,7 @@ public class Matrix {
      * @params x -- The Left Matrix to multiply
      * @params y -- the Right Matrix to multiply
      */
-    public static Matrix matrixMultiply(Matrix x, Matrix y)
-    {
+    public static Matrix matrixMultiply(Matrix x, Matrix y){
         Matrix result;
         double[][] xColumnRows = x.getColumnRows();
         double[][] yColumnRows = y.getColumnRows();
@@ -159,8 +155,7 @@ public class Matrix {
      * @params x -- this is the matrix that you want to augment
      * @params y -- this is the matrix you want to augment matrix x with
      */
-    public static Matrix augment(Matrix x, Matrix y)
-    {
+    public static Matrix augment(Matrix x, Matrix y){
         Matrix result;
         double[][] resultColumnRows = new double[x.numRows][x.numColumns + y.numColumns];
         double[][] xColumnRows = x.getColumnRows();
@@ -195,8 +190,7 @@ public class Matrix {
      * @params x -- this is the row that is passed in
      * @params y -- this is the multiple that is passed in
      */
-    private static double[] rowMultiplication(double[] x, double y)
-    {
+    private static double[] rowMultiplication(double[] x, double y){
         double[] result = new double[x.length];
         for(int i = 0; i < x.length; i++)
         {
@@ -210,8 +204,7 @@ public class Matrix {
      * @params x -- this is the row being subtracted from
      * @params y -- this is the row doing the subtracting
      */
-    private static double[] rowSubtraction(double[] x, double[] y)
-    {
+    private static double[] rowSubtraction(double[] x, double[] y){
         double[] result = new double[x.length];
         for(int i = 0; i < x.length; i++)
         {
@@ -225,24 +218,30 @@ public class Matrix {
      * ***NOTE*** echelon form is different than reduced echelon form make sure you use the right one
      * @params x -- this is the matrix that you want to reduce to echelon form
      */
-    public static Matrix reduceToEchelon(Matrix x)
-    {
+    public static Matrix reduceToEchelon(Matrix x){
         double[][] xColumnRows = x.getColumnRows();
-        double[] rowA = new double[x.numColumns];
-        double[] rowB = new double[x.numColumns];
+        double[][] resultColumnRows = new double[x.numRows][x.numColumns];
+        double[] rowA;
+        double[] rowB;
+
+        for(int i = 0; i<x.numRows;i++){
+            for( int j = 0; j<x.numColumns;j++){
+                resultColumnRows[i][j] = xColumnRows[i][j];
+            }
+        }
 
         for(int i = 0; i < x.numRows; i++)
         {
-            if(xColumnRows[i][i] == 0)
+            if(resultColumnRows[i][i] == 0)
             {
-                rowA = xColumnRows[i];
+                rowA = resultColumnRows[i];
                 for(int k = i+1; k<x.numRows; k++)
                 {
-                    if(xColumnRows[k][i] != 0)
+                    if(resultColumnRows[k][i] != 0)
                     {
-                        rowB = xColumnRows[k];
-                        xColumnRows[k] = rowA;
-                        xColumnRows[i] = rowB;
+                        rowB = resultColumnRows[k];
+                        resultColumnRows[k] = rowA;
+                        resultColumnRows[i] = rowB;
                         break;
                     }
                 }
@@ -251,14 +250,16 @@ public class Matrix {
             {
                 for(int k = i+1; k<x.numRows; k++ )
                 {
-                    rowA = Matrix.rowMultiplication(xColumnRows[i],xColumnRows[k][i]/xColumnRows[i][i]);
-                    xColumnRows[k] = Matrix.rowSubtraction(xColumnRows[k],rowA);
+                    rowA = Matrix.rowMultiplication(resultColumnRows[i],resultColumnRows[k][i]/resultColumnRows[i][i]);
+                    resultColumnRows[k] = Matrix.rowSubtraction(resultColumnRows[k],rowA);
                 }
             }
         }
 
-        Matrix result = new Matrix(xColumnRows);
+        Matrix result = new Matrix(resultColumnRows);
         return result;
+
+
     }
 
 
@@ -266,13 +267,12 @@ public class Matrix {
      * ***NOTE*** echelon form is different than reduced echelon form make sure you are using the right one
      * @params x -- this is the matrix that you want reduced
      */
-    public static Matrix reduceToReducedEchelonForm(Matrix x)
-    {
+    public static Matrix reduceToReducedEchelonForm(Matrix x){
         Matrix result;
         Matrix temp = Matrix.reduceToEchelon(x);
         double[][] tempColumnRows = temp.getColumnRows();
         int rowNumA = temp.numRows;
-        double[] rowA = new double[temp.numColumns];
+        double[] rowA;
         for(int i = 0; i <temp.numRows; i++)
         {
             if(tempColumnRows[i][i] != 0){
@@ -390,8 +390,8 @@ public class Matrix {
             }
         }
         Matrix idMatrix = new Matrix(idColumnRows);
-        Matrix invertableMatrix = Matrix.augment(x,idMatrix);
-        Matrix invertedMatrix = Matrix.reduceToReducedEchelonForm(invertableMatrix);
+        Matrix invertibleMatrix = Matrix.augment(x,idMatrix);
+        Matrix invertedMatrix = Matrix.reduceToReducedEchelonForm(invertibleMatrix);
         double[][] invertedColumnRows = invertedMatrix.getColumnRows();
 
 
@@ -443,7 +443,12 @@ public class Matrix {
         String arrayNums = "";
         for(int i = 0; i < numRows; i++)
         {
+            if(i < numRows - 1){
             arrayNums += Arrays.toString(columnRows[i]) + ", ";
+            }
+            else {
+                arrayNums += Arrays.toString(columnRows[i]);
+            }
         }
 
         return "Matrix{" +

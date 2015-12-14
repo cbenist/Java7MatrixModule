@@ -43,7 +43,7 @@ public class MatrixTester {
 
         System.out.println("Matrix G: " + matrixG);
 
-        Matrix matrixH = new Matrix(new double[][]{{1,2,3},{4,5,6},{7,8,9}});
+        Matrix matrixH = new Matrix(new double[][]{{1.0,2.0,3.0},{4.0,5.0,6.0},{7.0,8.0,9.0}});
 
         System.out.println("Matrix H: " + matrixH);
 
@@ -54,6 +54,10 @@ public class MatrixTester {
         Matrix matrixJ = Matrix.reduceToReducedEchelonForm(matrixH);
 
         System.out.println("Matrix J: " + matrixJ);
+
+        //matrixH = new Matrix(new double[][]{{1.0,2.0,3.0},{4.0,5.0,6.0},{7.0,8.0,9.0}});
+
+        System.out.println("Matrix H2.0: " + matrixH);
 
         Matrix matrixK = Matrix.transpose(matrixH);
 
@@ -78,6 +82,16 @@ public class MatrixTester {
         Matrix matrixM = Matrix.inverse(matrixL);
 
         System.out.println("Matrix M: " + matrixM);
+
+        Matrix matrixN = new Matrix(new double[][]{{1.0,0.0,0.0},{0.0,1.0,0.0},{0.0,0.0,1.0}});
+
+        Matrix matrixO = Matrix.matrixMultiply(matrixH,matrixN);
+
+        System.out.println("Matrix O: " + matrixO);
+
+        Matrix matrixP = Matrix.matrixMultiply(matrixH, matrixL);
+
+        System.out.println("Matrix P: " + matrixP);
 
 
     }
